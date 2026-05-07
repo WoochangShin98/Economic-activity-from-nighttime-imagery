@@ -8,7 +8,7 @@ This project investigates whether nighttime satellite imagery can be used to pre
 
 Traditional economic indicators such as poverty rates are typically obtained through surveys and official statistical processes, which can be expensive and time-consuming. This project explores whether remotely sensed nighttime-light imagery can serve as a scalable proxy for local economic conditions.
 
-Compared with our original proposal focused on GDP-tier classification, the project was redesigned as a poverty-rate regression task. This formulation preserves continuous variation across counties and avoids dependence on arbitrary classification thresholds. :contentReference[oaicite:1]{index=1}
+Compared with our original proposal focused on GDP-tier classification, the project was redesigned as a poverty-rate regression task. This formulation preserves continuous variation across counties and avoids dependence on arbitrary classification thresholds. 
 
 ---
 
