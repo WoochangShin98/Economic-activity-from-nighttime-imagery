@@ -1,6 +1,6 @@
 # Estimating Economic Activity from Nighttime Satellite Imagery
 
-This project investigates whether nighttime satellite imagery can be used to predict county-level poverty rates in the mainland United States using machine learning and deep learning approaches. The project uses 2024 VIIRS nighttime light imagery and county-level poverty statistics from the SAIPE dataset. :contentReference[oaicite:0]{index=0}
+This project investigates whether nighttime satellite imagery can be used to predict county-level poverty rates in the mainland United States using machine learning and deep learning approaches. The project uses 2024 VIIRS nighttime light imagery and county-level poverty statistics from the SAIPE dataset.
 
 ---
 
