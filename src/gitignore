@@ -1,0 +1,19 @@
+# Raw data (too large for GitHub)
+data/
+*.tif
+*.dat
+
+# Output directories
+county_outputs/
+county_overlay_gray_png/
+county_dark_png/
+*.png
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.py[cod]
+.env
+venv/
