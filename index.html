@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta property="og:title" content="Estimating County-Level Poverty Rates from Nighttime Satellite Imagery">
+  <meta property="og:description" content="Predicting county-level poverty rates in the mainland United States using nighttime satellite imagery, machine learning, and deep learning.">
+  <meta property="og:url" content="https://woochangshin98.github.io/Economic-activity-from-nighttime-imagery/">
+  <meta property="og:type" content="website">
+
+  <title>Estimating County-Level Poverty Rates from Nighttime Satellite Imagery</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #222;
+      line-height: 1.65;
+      background: #ffffff;
+    }
+
+    .wrapper {
+      width: min(1000px, 92%);
+      margin: 0 auto;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 70px 0 35px;
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      line-height: 1.2;
+      margin-bottom: 15px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-top: 38px;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+      margin-top: 28px;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .authors {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 18px 30px;
+      margin-top: 25px;
+    }
+
+    .author {
+      font-weight: 600;
+    }
+
+    .buttons {
+      margin-top: 28px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 18px;
+      border: 1px solid #222;
+      border-radius: 999px;
+      text-decoration: none;
+      color: #222;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .button:hover {
+      background: #222;
+      color: #fff;
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid #ddd;
+      margin: 40px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    th,
+    td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background: #f4f4f4;
+    }
+
+    .best {
+      background: #eef7ff;
+      font-weight: 700;
+    }
+
+    code {
+      background: #f3f3f3;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+
+    footer {
+      margin: 50px 0 30px;
+      text-align: center;
+      color: #777;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 700px) {
+      h1 {
+        font-size: 1.9rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      table {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="wrapper">
+
+    <section class="hero">
+
+      <h1>
+        Estimating County-Level Poverty Rates from Nighttime Satellite Imagery
+      </h1>
+
+      <p class="subtitle">
+        Machine Learning and Deep Learning for County-Level Socioeconomic Estimation
+      </p>
+
+      <p class="subtitle">
+        Mainland United States · 2024 VIIRS · TIGER/Line · SAIPE
+      </p>
+
+      <div class="authors">
+        <span class="author">Woochang Shin</span>
+        <span class="author">Jisun Kim</span>
+        <span class="author">le000531</span>
+        <span class="author">huangshihwen51-prog</span>
+      </div>
+
+      <div class="buttons">
+
+        <a
+          class="button"
+          href="https://github.com/WoochangShin98/Economic-activity-from-nighttime-imagery"
+          target="_blank"
+        >
+          GitHub Repository
+        </a>
+
+        <a
+          class="button"
+          href="https://github.com/WoochangShin98/Economic-activity-from-nighttime-imagery/tree/main/results"
+          target="_blank"
+        >
+          Results
+        </a>
+
+        <a
+          class="button"
+          href="https://github.com/WoochangShin98/Economic-activity-from-nighttime-imagery/tree/main/models"
+          target="_blank"
+        >
+          Models
+        </a>
+
+      </div>
+
+    </section>
+
+    <hr>
+
+    <h2 id="abstract">Abstract</h2>
+
+    <p>
+      This project investigates whether nighttime satellite imagery can be used
+      to predict county-level poverty rates across the mainland United States.
+      We combine 2024 VIIRS nighttime-light imagery, TIGER/Line county polygons,
+      and 2024 SAIPE county-level poverty estimates, and formulate the task as
+      a continuous regression problem.
+    </p>
+
+    <p>
+      We compare handcrafted brightness-based statistical models, an end-to-end
+      CNN, and hybrid models that extract CNN embeddings and use classical
+      regression algorithms.
+    </p>
+
+    <p>
+      The strongest model is an improved Random Forest regressor trained on CNN
+      embeddings, achieving an R² of <strong>0.141</strong>.
+    </p>
+
+    <hr>
+
+    <h2 id="data">Data</h2>
+
+    <p>
+      The project uses three main data sources:
+    </p>
+
+    <ul>
+      <li>
+        <strong>2024 VIIRS nighttime-light imagery</strong>
+        for nighttime illumination patterns.
+      </li>
+
+      <li>
+        <strong>TIGER/Line county polygons</strong>
+        for county-level geographic boundaries.
+      </li>
+
+      <li>
+        <strong>2024 SAIPE county-level poverty rates</strong>
+        as the prediction target.
+      </li>
+    </ul>
+
+    <p>
+      Compared with the original proposal focused on GDP-tier classification,
+      the task was reformulated as a continuous county-level poverty-rate
+      regression problem.
+    </p>
+
+    <hr>
+
+    <h2 id="approach">Approach</h2>
+
+    <h3>Model 1 — Statistical Brightness Regression</h3>
+
+    <p>
+      We first construct handcrafted nighttime-light brightness features and
+      evaluate traditional regression methods including Linear Regression and
+      Random Forest Regression.
+    </p>
+
+    <p>
+      This baseline measures how much socioeconomic information can be captured
+      through aggregate brightness statistics alone.
+    </p>
+
+    <h3>Model 2 — CNN Hybrid Embedding Regression</h3>
+
+    <p>
+      County-level nighttime images are passed through a CNN feature extractor.
+      The resulting feature embeddings are then used as inputs to regression
+      models.
+    </p>
+
+    <p>
+      The pipeline is:
+    </p>
+
+    <p>
+      <strong>
+        County Image → CNN Feature Extractor → Embedding Extraction → Regression Model
+      </strong>
+    </p>
+
+    <p>
+      We evaluate both Ridge Regression and Random Forest Regression on the
+      learned CNN embeddings.
+    </p>
+
+    <h3>Model 3 — Improved Hybrid CNN Embedding Regression</h3>
+
+    <p>
+      The improved pipeline introduces preprocessing and modeling changes
+      designed to make county-level nighttime-light representations more stable
+      and informative.
+    </p>
+
+    <ul>
+      <li>Logarithmic brightness transformation using <code>log1p</code></li>
+      <li>Grayscale background compositing</li>
+      <li>Illumination normalization</li>
+      <li>Proportional county scaling</li>
+      <li>Border-aware preprocessing</li>
+      <li>Tuned Random Forest regression</li>
+      <li>Improved CNN embedding stability</li>
+    </ul>
+
+    <hr>
+
+    <h2 id="results">Results</h2>
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>R²</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td>Linear Regression</td>
+          <td>0.087</td>
+        </tr>
+
+        <tr>
+          <td>Random Forest</td>
+          <td>0.056</td>
+        </tr>
+
+        <tr>
+          <td>End-to-End CNN</td>
+          <td>0.067</td>
+        </tr>
+
+        <tr>
+          <td>Ridge on CNN Embeddings</td>
+          <td>0.100</td>
+        </tr>
+
+        <tr>
+          <td>RF on CNN Embeddings</td>
+          <td>0.115</td>
+        </tr>
+
+        <tr>
+          <td>Improved Ridge on CNN Embeddings</td>
+          <td>0.088</td>
+        </tr>
+
+        <tr class="best">
+          <td>Improved RF on CNN Embeddings</td>
+          <td>0.141</td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+    <h3>Best-Performing Model</h3>
+
+    <p>
+      The best-performing model is
+      <strong>Random Forest Regression on improved CNN embeddings</strong>,
+      with an R² of <strong>0.141</strong>.
+    </p>
+
+    <hr>
+
+    <h2 id="findings">Main Findings</h2>
+
+    <ul>
+      <li>
+        CNN embedding hybrid models outperform handcrafted statistical baselines.
+      </li>
+
+      <li>
+        End-to-end CNN regression performs worse than hybrid embedding-based models.
+      </li>
+
+      <li>
+        Spatial nighttime-light patterns contain socioeconomic information beyond
+        simple brightness statistics.
+      </li>
+
+      <li>
+        Improved preprocessing and hybrid embedding regression produce the
+        strongest predictive performance.
+      </li>
+
+      <li>
+        The results suggest that nighttime-light imagery contains a measurable,
+        though limited, signal related to county-level poverty.
+      </li>
+    </ul>
+
+    <hr>
+
+    <h2 id="limitations">Limitations and Future Work</h2>
+
+    <p>
+      Although the improved hybrid model performs best among the evaluated
+      approaches, the overall R² remains modest.
+    </p>
+
+    <p>
+      Poverty is influenced by many factors that cannot be fully captured through
+      nighttime illumination alone, including housing costs, demographic structure,
+      employment, access to services, and regional economic differences.
+    </p>
+
+    <p>
+      Future work could combine nighttime-light imagery with additional spatial
+      and socioeconomic variables, investigate stronger pretrained vision encoders,
+      test alternative spatial aggregation strategies, and evaluate model
+      generalization across different years and regions.
+    </p>
+
+    <hr>
+
+    <h2 id="repository">Repository Structure</h2>
+
+    <ul>
+
+      <li>
+        <code>data/</code>
+        — project datasets and processed data
+      </li>
+
+      <li>
+        <code>models/</code>
+        — model notebooks and experiments
+      </li>
+
+      <li>
+        <code>results/</code>
+        — evaluation outputs and results
+      </li>
+
+      <li>
+        <code>src/</code>
+        — preprocessing and modeling source code
+      </li>
+
+    </ul>
+
+    <footer>
+      Economic Activity from Nighttime Imagery · GitHub Pages
+    </footer>
+
+  </div>
+
+</body>
+</html>
